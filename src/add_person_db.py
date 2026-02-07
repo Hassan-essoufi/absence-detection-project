@@ -2,7 +2,7 @@ import os
 import cv2
 import time
 
-def capture_faces(person_name, output_dir="../dataset", nb_imgs=150):
+def capture_faces(person_name, output_dir="..\dataset", nb_imgs=150):
     """
     Automatic capturing of images 
     """
@@ -73,5 +73,4 @@ def capture_faces(person_name, output_dir="../dataset", nb_imgs=150):
     cv2.destroyAllWindows()
     
     print(f"\n {count} images captured in: {person_dir}")
-    return count
 

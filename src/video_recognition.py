@@ -11,7 +11,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 class VideoFaceRecognition():
     
-    def __init__(self, embeddings_db_path="../embeddings.npy", threshold=0.5):
+    def __init__(self, embeddings_db_path="../embeddings.npy", threshold=0.6):
         
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.threshold = threshold
@@ -97,7 +97,7 @@ class VideoFaceRecognition():
         
         return "Unknown", best_score
     
-    def process_video(self, input_path, output_path):
+    def process_video(self, input_path, output_path, attendance_file):
         """
         Video face recognition        
         """
@@ -171,13 +171,12 @@ class VideoFaceRecognition():
 
         time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        with open("attendance.csv", "w", newline="") as f:
+        with open(attendance_file, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["Name", "Status", "Time"])
             for name, status in self.attendance.items():
                 writer.writerow([name, status, time_now])
         
         return True
-
 
 

@@ -3,10 +3,10 @@ import cv2
 import csv
 import numpy as np
 from numpy.linalg import norm
-import datetime as datetime
+from datetime import datetime
 
 import torch
-import torchvision.transforms as T
+import torchvision.transforms as transforms
 from facenet_pytorch import InceptionResnetV1, MTCNN
 
 def get_embedding(image_rgb):
@@ -14,8 +14,6 @@ def get_embedding(image_rgb):
     Extract embedding from an image
     """
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Device: {device}")
-
     embedder = InceptionResnetV1(pretrained='vggface2').eval().to(device)
 
     detector = MTCNN(
@@ -25,11 +23,11 @@ def get_embedding(image_rgb):
     device=device 
     )
 
-    transform = T.Compose([
-    T.ToPILImage(),
-    T.Resize((160, 160)),
-    T.ToTensor(),
-    T.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+    transform = transforms.Compose([
+    transforms.ToPILImage(),
+    transforms.Resize((160, 160)),
+    transforms.ToTensor(),
+    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
     ])
 
     try:
@@ -61,7 +59,7 @@ def get_embedding(image_rgb):
         print(f"extraction Error: {e}")
     
 
-def build_database(dataset_path="dataset"):
+def build_database(dataset_path="../dataset"):
     """
     Create embedding's database
     """
@@ -101,7 +99,9 @@ def build_database(dataset_path="dataset"):
                 continue
             
             img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            embedding, _ = get_embedding(img_rgb)
+            result = get_embedding(img_rgb)
+            if result is not None:
+                embedding, _ = get_embedding(img_rgb)
             
             if embedding is not None:
                 embeds.append(embedding)
@@ -116,7 +116,7 @@ def build_database(dataset_path="dataset"):
     
     # Saving
     if embeddings_db:
-        np.save("embeddings.npy", embeddings_db)
+        np.save("../embeddings.npy", embeddings_db)
         print(f"\n Created base : {len(embeddings_db)} persons")
     else:
         print("\n empty base!")
@@ -124,9 +124,9 @@ def build_database(dataset_path="dataset"):
     return embeddings_db
 
 
-def real_time_attendance(
-    embeddings_path="test/embeddings.npy",
-    csv_file="attendance.csv",
+def real_time_att(
+    embeddings_path,
+    csv_file,
     threshold=0.6):
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -165,11 +165,6 @@ def real_time_attendance(
                 embedding = embedding / norm(embedding)
 
                 scores = np.dot(known_embeddings, embedding)
-
-                scores_per_person = {
-                    known_names[i]: float(scores[i])
-                    for i in range(len(known_names))
-                }
 
                 best_idx = np.argmax(scores)
                 best_score = scores[best_idx]
