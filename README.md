@@ -1,6 +1,6 @@
-# 🎥 Real-Time Face Recognition System for Automated Attendance
+# 🎥 Face Recognition System for Automated Attendance
 
-This project implements a **real-time and video-based face recognition & attendance system** using **FaceNet**, **MTCNN**, **OpenCV**, and **cosine similarity**. It supports both **live webcam recognition** and **offline video detection**, designed for **classroom attendance, recorded sessions, and surveillance-style analysis**.
+This project implements a **webcam and video-based face recognition & attendance system** using **FaceNet**, **MTCNN**, **OpenCV**, and **cosine similarity**. It supports both **live webcam recognition** and **offline video detection**, designed for **classroom attendance, recorded sessions, and surveillance-style analysis**.
 
 ---
 
@@ -9,15 +9,15 @@ This project implements a **real-time and video-based face recognition & attenda
 * 📸 Face detection using **MTCNN** 
 * 🧠 Face embedding extraction with **FaceNet (InceptionResnetV1)**
 * 📐 Identity matching using **cosine similarity**
-* 🎥 **Real-time webcam recognition**
-* 🎞️ **Video file face recognition** (MP4, AVI, etc.)
+* 🎥 **Webcam face recognition**
+* 🎞️ **Video file face recognition** (MP4)
 * 🗂️ Embedding database built automatically from a dataset
 * 🧾 Attendance export to **CSV** with timestamp
 * ❓ Unknown face handling
 
 ---
 
-## 🧠 System Workflow (Real-Time & Video)
+## 🧠 System Workflow (Webcam & Video)
 
 1. Build a face **embedding database** from labeled images
 2. Capture frames from **webcam or video file**
